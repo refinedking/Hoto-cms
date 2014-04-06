@@ -1,0 +1,4 @@
+F:\VS2010\C#\hoto\Hoto.Web\bin\Hoto.Web.dll
+F:\VS2010\C#\hoto\Hoto.Web\bin\Hoto.Web.pdb
+F:\VS2010\C#\hoto\Hoto.Web\obj\Debug\Hoto.Web.dll
+F:\VS2010\C#\hoto\Hoto.Web\obj\Debug\Hoto.Web.pdb

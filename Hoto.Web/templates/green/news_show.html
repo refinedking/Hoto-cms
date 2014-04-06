@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%set (string){category_title}=get_category_title({model.category_id},"新闻资讯")%>
+<title>{model.title} - {category_title} - {config.webname}</title>
+<meta content="{model.seo_keywords}" name="keywords">
+<meta content="{model.seo_description}" name="description">
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/digg_ajax.js"></script>
+<script type="text/javascript">
+	$(function(){
+		bindDigg('{config.webpath}', '{model.id}');
+	});
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+   <!--Content-->
+    <div class="main_box">
+      <div class="meta">
+        <h1 class="meta-tit">{model.title}</h1>
+        <div class="share">
+            
+        </div>
+        <p class="meta-info">
+            <span class="time">{model.add_time}</span>
+            <span class="comm"><%write get_comment_count({model.id}, "is_lock=0")%>人评论</span>
+			<span class="view">{model.click}次浏览</span>
+            分类：{category_title}
+        </p>
+      </div>
+      <div class="entry">
+        {model.content}
+      </div>
+      
+      <div class="line10"></div>
+      <!--分享-->
+      <%template src=/_share_js.html/%>
+      <!--/分享-->
+      
+      <div class="line10"></div>
+      <!--顶踩-->
+      <%template src=/_digg_box.html/%>
+      <!--/项踩-->
+      
+      <!--同类推荐-->
+      <div class="related">
+        <h3 class="base_tit">相关资讯</h3>
+        <ul class="txt_list">
+          <%set (DataTable){rednews1}=get_news_list(channel_id, model.category_id, 8, "is_red=1 and id<>"+model.id)%>
+          <%loop reddr1 rednews1%>
+          <li><a title="{reddr1[title]}" href="<%linkurl("news_show",{reddr1[id]})%>">{reddr1[title]}</a><span>({reddr1[add_time]})</span></li>
+          <%/loop%>
+          <%if rednews1.Rows.Count<1%>
+          <div>同类下暂无推荐的资讯...</div>
+          <%/if%>
+        </ul>
+      </div>
+      <!--/同类推荐-->
+      
+      <!--评论-->
+      <%if model.is_msg==1%>
+      <%template src=/_comment_box.html/%>
+      <%/if%>
+      <!--/评论-->
+      
+    </div>
+    <!--/Content-->
+  </div>
+  
+  <div class="left264">
+    <!--Sidebar-->
+    <div class="sidebar">
+      <h3>资讯类别</h3>
+      <ul class="navbar">
+        <%set (DataTable){category_list1}=get_category_child_list(channel_id, 0)%>
+        <%loop cdr1 category_list1%>
+        <li>
+          <h4><a href="<%linkurl("news_list",{cdr1[id]})%>">{cdr1[title]}</a></h4>
+          <div class="list">
+            <%set (DataTable){category_list2}=get_category_child_list(channel_id, {strtoint({cdr1[id]})})%>
+            <%loop cdr2 category_list2%>
+            <%if {strtoint({cdr2[id]})}=={model.category_id}%>
+            <a href="<%linkurl("news_list",{cdr2[id]})%>" class="current">{cdr2[title]}</a>
+            <%else%>
+            <a href="<%linkurl("news_list",{cdr2[id]})%>">{cdr2[title]}</a>
+            <%/if%>
+            <%/loop%>
+          </div>
+        </li>
+        <%/loop%>
+      </ul>
+      <div class="clear"></div>
+      <h3>推荐资讯</h3>
+      <div class="focus_list">
+        <ul>
+          <%set (DataTable){rednews2}=get_news_list(channel_id, 0, 6, "img_url<>''")%>
+          <%loop reddr2 rednews2%>
+          <li>
+            <a title="{reddr2[title]}" href="<%linkurl("news_show",{reddr2[id]})%>">
+              <img src="{reddr2[img_url]}" width="100" height="100" alt="{reddr2[title]}" />
+              <span>{reddr2[title]}</span>
+            </a>
+          </li>
+          <%/loop%>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <h3>人气排行</h3>
+      <ul class="rank_list">
+        <%set (DataTable){hotphoto}=get_news_list(channel_id, 0, 10, "", "click desc,id desc")%>
+        <%loop hotdr hotphoto%>
+        <%if hotdr__loop__id==1%>
+        <li class="active">
+        <%else%>
+        <li>
+        <%/if%>
+          <span><%datetostr({hotdr[add_time]},MM-dd)%></span>
+          <i class="num"><%write hotdr__loop__id%></i><a href="<%linkurl("news_show",{hotdr[id]})%>">{hotdr[title]}</a>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+    <!--/Sidebar-->
+    
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

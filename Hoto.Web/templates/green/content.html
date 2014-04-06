@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{model.title} - {config.webname}</title>
+<link rel="stylesheet" href="{config.templateskin}/css/style.css" />
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+   <!--Content-->
+    <div class="content">
+      <div class="meta">
+        <h1 class="meta-tit">{model.title}</h1>
+      </div>
+      <div class="entry">
+        {model.content}
+      </div>
+    </div>
+    <!--/Content-->
+  </div>
+  
+  <div class="left264">
+    <!--Sidebar-->
+    <div class="sidebar">
+      <h3>栏目导航</h3>
+      <ul>
+        <%set (DataTable){contentlist}=get_content_list(channel_id, 0, 0, "is_lock=0")%>
+        <%loop cdr contentlist%>
+        <li><a title="{cdr[title]}" href="<%linkurl("content",{cdr[call_index]})%>">{cdr[title]}</a></li>
+        <%/loop%>
+        <li><a href="<%linkurl("feedback")%>">留言反馈</a></li>
+        <li><a href="<%linkurl("link")%>">友情链接</a></li>
+      </ul>
+      <h3>客户服务</h3>
+      <div class="section">
+        <p>电话：13800138000</p>
+        <p>在线QQ：400830000</p>
+        <p>E-mail：info@dtcms.net</p>
+        <p>新浪微博：http://weibo.com/dtcms</p>
+      </div>
+    </div>
+    <!--/Sidebar-->
+    
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

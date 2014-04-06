@@ -1,0 +1,16 @@
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.API.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.API.pdb
+F:\VS2010\C#\hoto\Hoto.API\obj\Debug\Hoto.API.dll
+F:\VS2010\C#\hoto\Hoto.API\obj\Debug\Hoto.API.pdb
+F:\VS2010\C#\hoto\Hoto.API\obj\Debug\Hoto.API.csprojResolveAssemblyReference.cache
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.BLL.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\hoto.Common.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.Model.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\LitJSON.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.DAL.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\hoto.DBUnility.dll
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.BLL.pdb
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\hoto.Common.pdb
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.Model.pdb
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\Hoto.DAL.pdb
+F:\VS2010\C#\hoto\Hoto.API\bin\Debug\hoto.DBUnility.pdb

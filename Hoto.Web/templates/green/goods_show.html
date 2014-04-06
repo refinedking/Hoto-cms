@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%set (string){category_title}=get_category_title({model.category_id},"商品介绍")%>
+<title>{model.title} - {category_title} - {config.webname}</title>
+<meta content="{model.seo_keywords}" name="keywords">
+<meta content="{model.seo_description}" name="description">
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.jqzoom.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/picture.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/digg_ajax.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/cart.js"></script>
+<script type="text/javascript">
+	$(function(){
+		bindDigg('{config.webpath}', '{model.id}');
+		tabs('#goodsTabs','click');
+		//智能浮动层
+		$("#tab_head").smartFloat();
+	});
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+   <!--Left-->
+    <div class="main_box">
+      <%set (string){category_nav}=get_category_menu("goods_list1", model.category_id)%>
+      <dl class="head green">
+        <dt>购物商城</dt>
+        <dd>
+          <span>当前位置：<a href="<%linkurl("index","")%>">首页 </a>&gt;<a href="<%linkurl("goods","")%>">购物商城</a>{category_nav}</span>
+        </dd>
+      </dl>
+      <div class="line20"></div>
+      
+      <!--商品图片-->
+      <div class="left294">
+        <!--幻灯片开始-->
+        <div class="pictureDIV">
+          <div id="preview" class="spec-preview">
+            <span class="jqzoom"><img /></span>
+          </div>
+          <!--缩图开始-->
+          <div class="spec-scroll">
+            <a class="prev">&lt;</a>
+            <a class="next">&gt;</a>
+            <div class="items">
+              <ul>
+                <%if model.albums!=null%>
+                <%loop (DTcms.Model.article_albums) modelt1 model.albums%>
+                <li><img bimg="{modelt1.big_img}" src="{modelt1.small_img}" onmousemove="preview(this);" /></li>
+                <%/loop%>
+                <%/if%>
+              </ul>
+            </div>
+          </div>
+          <!--缩图结束-->
+        </div>
+        <!--幻灯片结束-->
+      </div>
+       <!--/商品图片-->
+      
+      <!--商品属性-->
+      <div class="pro-attr right356">
+        <h1>{model.title}</h1>
+        <div class="pro-items">
+          <dl>
+            <dt>商品货号：</dt>
+            <dd>{model.goods_no}</dd>
+          </dl>
+          <dl>
+            <dt>库存情况：</dt>
+            <dd>{model.stock_quantity}件</dd>
+          </dl>
+          <dl>
+            <dt>销售价格：</dt>
+            <dd><b class="red">￥{model.sell_price}</b></dd>
+          </dl>
+          <dl>
+            <dt>会员价格：</dt>
+            <dd>
+              <%set (decimal){user_price}=get_user_goods_price(model.id)%>
+              <%if {user_price}>-1%>
+              <b class="red">￥{user_price}</b>
+              <%else%>
+              登录可见
+              <%/if%>
+            </dd>
+          </dl>
+          <dl>
+            <dt>上架时间：</dt>
+            <dd>{model.add_time}</dd>
+          </dl>
+          <!--扩展属性开始-->
+          <%if model.attribute_values!=null%>
+          <%loop (DTcms.Model.attribute_value) modelt model.attribute_values%>
+          <dl>
+            <dt>{modelt.title}：</dt>
+            <dd>{modelt.content}</dd>
+          </dl>
+          <%/loop%>
+          <%/if%>
+          <!--扩展属性结束-->
+        </div>
+        <div class="pro-btns">
+		  <div class="input-box">
+              购买数量：<input name="goods_id" id="goods_id" type="hidden" value="{model.id}" /><input type="text" name="goods_quantity" id="goods_quantity" value="1" class="txt" style="ime-mode:disabled" />
+          </div>
+          <div class="btn-box">
+            <%if {model.stock_quantity}>0%>
+            <a href="javascript:void(0);" class="add" onclick="CartAdd(this, '{config.webpath}', 0, '<%linkurl("shopping","cart")%>');">加入购物车</a>
+            <a href="javascript:void(0);" class="buy" onclick="CartAdd(this, '{config.webpath}', 1, '<%linkurl("shopping","confirm")%>');">立即购买</a>
+            <%else%>
+            <a title="该商品供货紧张，无法加入购物车" class="add-over">加入购物车</a>
+            <a title="该商品供货紧张，无法立即购买" class="buy-over">立即购买</a>
+            <%/if%>
+          </div>
+          
+        </div>
+        <div class="line10"></div>
+        <!--分享-->
+        <%template src=/_share2_js.html/%>
+        <!--/分享-->
+      </div>
+      <!--/商品属性-->
+      
+      <div class="line20"></div>
+      <!--商品介绍-->
+      <div id="goodsTabs">
+        <div id="tab_head" class="pro-tabs">
+          <ul>
+            <li><a class="current" href="javascript:;">商品介绍</a></li>
+            <li><a href="javascript:;">商品评论</a></li>
+          </ul>
+        </div>
+        <div class="line10"></div>
+        <div class="tab_inner entry" style="display:block;">
+          {model.content}
+          <div class="line10"></div>
+          <!--顶踩-->
+          <%template src=/_digg_box.html/%>
+          <!--/项踩-->
+        </div>
+        
+        <div class="tab_inner">
+          <!--评论-->
+          <%if model.is_msg==1%>
+          <%template src=/_comment_box.html/%>
+          <%/if%>
+          <!--/评论-->
+        </div>
+        
+      </div>
+      <!--/商品介绍-->
+      
+      <!--同类推荐-->
+      <div class="related">
+        <h3 class="base_tit">本类推荐</h3>
+        <ul class="img_list">
+          <%set (DataTable){goods_list}=get_goods_list(channel_id, 0, 10, "is_red=1 and id<>" + model.id)%>
+          <%loop listdr goods_list%>
+          <li><a title="{listdr[title]}" href="<%linkurl("goods_show",{listdr[id]})%>"><img alt="{listdr[title]}" src="{listdr[img_url]}"><span>{listdr[title]}</span></a></li>
+           <%/loop%>
+        </ul>
+      </div>
+      <!--/同类推荐-->
+      
+    </div>
+    <!--/Left-->
+  </div>
+  
+  <div class="left264">
+    <!--Sidebar-->
+    <div class="sidebar">
+      <h3>商品类别</h3>
+      <ul class="navbar">
+        <%set (DataTable){category_list2}=get_category_child_list(channel_id, 0)%>
+        <%loop cdr2 category_list2%>
+        <li>
+          <h4><a href="<%linkurl("goods_list",{cdr2[id]})%>">{cdr2[title]}</a></h4>
+          <div class="list">
+            <%set (DataTable){category_list21}=get_category_child_list(channel_id, {strtoint({cdr2[id]})})%>
+            <%loop cdr21 category_list21%>
+            <%if {strtoint({cdr21[id]})}=={model.category_id}%>
+            <a href="<%linkurl("goods_list",{cdr21[id]})%>" class="current">{cdr21[title]}</a>
+            <%else%>
+            <a href="<%linkurl("goods_list",{cdr21[id]})%>">{cdr21[title]}</a>
+            <%/if%>
+            <%/loop%>
+          </div>
+        </li>
+        <%/loop%>
+      </ul>
+      <div class="clear"></div>
+      <h3><a class="arrow" href="<%linkurl("goods")%>" title="查看更多">&gt;</a>推荐商品</h3>
+      <div class="focus_list">
+        <ul>
+          <%set (DataTable){redgoods}=get_goods_list(channel_id, 0, 6, "is_red=1 and img_url<>''")%>
+          <%loop reddr redgoods%>
+          <li>
+            <a title="{reddr[title]}" href="<%linkurl("goods_show",{reddr[id]})%>">
+              <img src="{reddr[img_url]}" width="100" height="100" alt="{reddr[title]}" />
+              <span>{reddr[title]}</span>
+            </a>
+          </li>
+          <%/loop%>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <h3><a class="arrow" href="<%linkurl("goods")%>" title="查看更多">&gt;</a>人气排行</h3>
+      <ul class="rank_list">
+        <%set (DataTable){hotgoods}=get_goods_list(channel_id, 0, 10, "", "click desc,id desc")%>
+        <%loop hotdr hotgoods%>
+        <%if hotdr__loop__id==1%>
+        <li class="active">
+        <%else%>
+        <li>
+        <%/if%>
+          <span><%datetostr({hotdr[add_time]},MM-dd)%></span>
+          <i class="num"><%write hotdr__loop__id%></i><a href="<%linkurl("goods_show",{hotdr[id]})%>">{hotdr[title]}</a>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+    <!--/Sidebar-->
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

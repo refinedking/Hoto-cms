@@ -1,0 +1,59 @@
+﻿  <%set (int){comment_count}=get_comment_count({model.id}, "is_lock=0")%><!--取得评论总数-->
+  <link rel="stylesheet" href="{config.webpath}css/validate.css" />
+  <link rel="stylesheet" href="{config.webpath}css/pagination.css" />
+  <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.form.js"></script>
+  <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.validate.min.js"></script>
+	  <script type="text/javascript" src="{config.webpath}scripts/jquery/messages_cn.js"></script>
+      <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.pagination.js"></script>
+      <script type="text/javascript">
+        $(function(){
+          //初始化评论列表
+          AjaxPageList('#comment_list', '#pagination', 10, {comment_count}, '{config.webpath}tools/submit_ajax.ashx?action=comment_list&article_id={model.id}', '{config.templateskin}/images/user_avatar.png');
+          //初始化发表评论表单
+          AjaxInitForm('comment_form', 'btnSubmit', 1);
+        });
+      </script>
+      <div class="comment_box">
+        <h3 class="base_tit"><span><a href="#Add">发表评论</a></span>共有{comment_count}访客发表了评论</h3>
+        <ol id="comment_list" class="comment_list">
+          <p style="line-height:35px;">暂无评论，快来抢沙发吧！</p>
+          <!--
+          <li>
+            <div class="floor">#3</div>
+            <div class="avatar">
+              <img src="images/user_avatar.png" width="36" height="36" />
+            </div>
+            <div class="inner">
+              <p>你这个评论的模块是怎么实现的，能不能写一下哇，觉得很好看</p>
+              <div class="meta">
+                <span class="blue">匿名用户</span>
+                <span class="time">2012-08-13 00:45</span>
+              </div>
+            </div>
+            <div class="answer">
+              <div class="meta">
+                <span class="right time">2012-11-15 00:21:05</span>
+                <span class="blue">管理员回复：</span>
+              </div>
+              <p>我晕，我什么时候购买博主的模板了？？首先声明的是 我的微之恋是用大前端的html页面，HTML页面我也是Ctrl+s进行另存为下来的，然后我用wordpress的程序改了改就发布了，很多bug我也懒得改，功能也没有大前段的主题功能强大，也就可以认为一个演示版吧，首先说的是本人木有购买，再者更没有购买后无耻进行发布，我只是靠的自己的双手收获我想要的成功，我想这就是开源精神吧？我把自己写的代码进行开源有何不可？况且我只是另存为了3个页面其他的PHP程序还不是都是我写的，大家爱用就用，不爱用也不要冷嘲热讽好不好?拿着我的免费主题说我的坏话，我真的很无语！</p>
+            </div>
+          </li>
+          -->
+        </ol>
+      </div>
+      <div class="line20"></div>
+      <div id="pagination" class="flickr"></div><!--放置页码-->
+      <div class="comment_add">
+        <h3 class="base_tit">我来说几句吧<a name="Add"></a></h3>
+        <form id="comment_form" name="comment_form" url="{config.webpath}tools/submit_ajax.ashx?action=comment_add&article_id={model.id}">
+        <div class="comment_editor">
+          <textarea id="txtContent" name="txtContent" class="input" style="width:658px;height:70px;"></textarea>
+        </div>
+        <div class="subcon">
+          <input id="btnSubmit" name="submit" class="btn right" type="submit" value="提交评论（Ctrl+Enter）" />
+          <span>验证码：</span>
+          <input id="txtCode" name="txtCode" type="text" class="input small required" onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('btnSubmit').click();return false};"  />
+          <a href="javascript:;" onclick="ToggleCode(this, '{config.webpath}tools/verify_code.ashx');return false;"><img src="{config.webpath}tools/verify_code.ashx" width="80" height="22" style="vertical-align:middle;" /> 看不清楚？</a>
+        </div>
+        </form>
+      </div>

@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%set (string){category_title}=get_category_title({category_id},"购物商城")%>
+<title>{category_title} - {config.webname}</title>
+<link rel="stylesheet" href="{config.webpath}css/pagination.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+   <!--Content-->
+    <div class="main_box">
+      <%set (string){category_nav}=get_category_menu("goods_list1", category_id)%>
+      <dl class="head green">
+        <dt>购物商城</dt>
+        <dd>
+          <span>当前位置：<a href="<%linkurl("index","")%>">首页 </a>&gt;<a href="<%linkurl("goods","")%>">购物商城</a>{category_nav}</span>
+        </dd>
+      </dl>
+      <div class="clear"></div>
+      <h1 class="base_tit">分类“{category_title}”的内容</h1>
+      <div class="pro_list">
+        <ul>
+          <%set (DataTable){goods_list}=get_goods_list(channel_id, category_id, 16, page, "", out totalcount)%> <!--取得一个DataTable-->
+          <%set (string){pagelist}=get_page_link(16, page, totalcount, "goods_list1", category_id, "__id__")%> <!--取得分页页码列表-->
+          <%loop listdr goods_list%>
+          <li>
+            <a class="pic" href="<%linkurl("goods_show",{listdr[id]})%>" title="{listdr[title]}"><img src="{listdr[img_url]}" alt="{listdr[title]}" /></a>
+            <div class="info">
+              <a class="name" href="<%linkurl("goods_show",{listdr[id]})%>" title="{listdr[title]}">{listdr[title]}</a>
+              <div class="price">
+                <span>价格：</span>
+                <strong>￥{listdr[sell_price]}</strong>
+              </div>
+            </div>
+          </li>
+          <%/loop%>
+        </ul>
+      </div>
+      <div class="line20"></div>
+      <div class="flickr">{pagelist}</div> <!--放置页码列表-->
+    </div>
+    <!--/Content-->
+  </div>
+  
+  <div class="left264">
+    <!--Sidebar-->
+    <div class="sidebar">
+      <h3>商品类别</h3>
+      <ul class="navbar">
+        <%set (DataTable){category_list2}=get_category_child_list(channel_id, 0)%>
+        <%loop cdr2 category_list2%>
+        <li>
+          <h4><a href="<%linkurl("goods_list",{cdr2[id]})%>">{cdr2[title]}</a></h4>
+          <div class="list">
+            <%set (DataTable){category_list21}=get_category_child_list(channel_id, {strtoint({cdr2[id]})})%>
+            <%loop cdr21 category_list21%>
+            <%if {strtoint({cdr21[id]})}=={category_id}%>
+            <a href="<%linkurl("goods_list",{cdr21[id]})%>" class="current">{cdr21[title]}</a>
+            <%else%>
+            <a href="<%linkurl("goods_list",{cdr21[id]})%>">{cdr21[title]}</a>
+            <%/if%>
+            <%/loop%>
+          </div>
+        </li>
+        <%/loop%>
+      </ul>
+      <div class="clear"></div>
+      <h3><a class="arrow" href="<%linkurl("goods")%>" title="查看更多">&gt;</a>推荐商品</h3>
+      <div class="focus_list">
+        <ul>
+          <%set (DataTable){redgoods}=get_goods_list(channel_id, 0, 6, "is_red=1 and img_url<>''")%>
+          <%loop reddr redgoods%>
+          <li>
+            <a title="{reddr[title]}" href="<%linkurl("goods_show",{reddr[id]})%>">
+              <img src="{reddr[img_url]}" width="100" height="100" alt="{reddr[title]}" />
+              <span>{reddr[title]}</span>
+            </a>
+          </li>
+          <%/loop%>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <h3><a class="arrow" href="<%linkurl("goods")%>" title="查看更多">&gt;</a>人气排行</h3>
+      <ul class="rank_list">
+        <%set (DataTable){hotgoods}=get_goods_list(channel_id, 0, 10, "", "click desc,id desc")%>
+        <%loop hotdr hotgoods%>
+        <%if hotdr__loop__id==1%>
+        <li class="active">
+        <%else%>
+        <li>
+        <%/if%>
+          <span><%datetostr({hotdr[add_time]},MM-dd)%></span>
+          <i class="num"><%write hotdr__loop__id%></i><a href="<%linkurl("goods_show",{hotdr[id]})%>">{hotdr[title]}</a>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+    <!--/Sidebar-->
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

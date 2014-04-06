@@ -1,0 +1,13 @@
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.BLL.dll
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.BLL.pdb
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\hoto.Common.dll
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.DAL.dll
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.Model.dll
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\hoto.DBUnility.dll
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\hoto.Common.pdb
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.DAL.pdb
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\Hoto.Model.pdb
+F:\VS2010\C#\hoto\Hoto.BLL\bin\Debug\hoto.DBUnility.pdb
+F:\VS2010\C#\hoto\Hoto.BLL\obj\Debug\Hoto.BLL.csprojResolveAssemblyReference.cache
+F:\VS2010\C#\hoto\Hoto.BLL\obj\Debug\Hoto.BLL.dll
+F:\VS2010\C#\hoto\Hoto.BLL\obj\Debug\Hoto.BLL.pdb

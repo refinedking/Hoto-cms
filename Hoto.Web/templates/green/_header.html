@@ -1,0 +1,26 @@
+﻿<div class="header">
+  <div class="header_inner">
+    <h1 class="logo">
+      <a title="{config.webname}" href="{config.weburl}">{config.webname}</a>
+    </h1>
+    <ul class="nav">
+      <li><a href="<%linkurl("goods")%>">购物商城</a></li>
+      <li><a href="<%linkurl("photo")%>">今日团购</a></li>
+    </ul>
+    <div class="search">
+      <input id="keywords" name="keywords" class="input" type="text" x-webkit-speech="" autofocus="" placeholder="输入回车搜索" onkeydown="if(event.keyCode==13){SiteSearch('{config.webpath}search.aspx', '#keywords');return false};" />
+      <input class="submit" type="submit" value="搜索" onclick="SiteSearch('{config.webpath}search.aspx', '#keywords');" />
+    </div>
+    <ul class="menu">
+      <li><a href="<%linkurl("content","contact")%>">联系我们</a></li>
+      <li><a href="<%linkurl("shopping","cart")%>">购物车<%write get_cart_quantity()%>件</a></li>
+      <%if IsUserLogin()%>
+      <li><a href="<%linkurl("usercenter","exit")%>">退出</a></li>
+      <li><a href="<%linkurl("usercenter","index")%>">会员中心</a></li>
+      <%else%>
+      <li><a href="<%linkurl("register")%>">注册</a></li>
+      <li><a href="<%linkurl("login")%>">登录</a></li>
+      <%/if%>
+    </ul>
+  </div>
+</div>

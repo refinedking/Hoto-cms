@@ -1,0 +1,4 @@
+F:\VS2010\C#\hoto\Hoto.Common\bin\Debug\hoto.Common.dll
+F:\VS2010\C#\hoto\Hoto.Common\bin\Debug\hoto.Common.pdb
+F:\VS2010\C#\hoto\Hoto.Common\obj\Debug\hoto.Common.dll
+F:\VS2010\C#\hoto\Hoto.Common\obj\Debug\hoto.Common.pdb

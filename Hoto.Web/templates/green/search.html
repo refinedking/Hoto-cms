@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>站内搜索 - {config.webname}</title>
+<meta content="{config.webkeyword}" name="keywords">
+<meta content="{config.webdescription}" name="description">
+<link rel="stylesheet" href="{config.webpath}css/pagination.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="main_box">
+    <%set (DataTable){list}=get_search_list(15, out totalcount)%> <!--取得一个DataTable-->
+	<%set (string){pagelist}=get_page_link(15, page, totalcount, "search.aspx?keyword=" + Server.UrlEncode(keyword) + "&page=__id__")%> <!--取得分页页码列表-->
+    <h1 class="main_tit">
+      站内搜索<strong>Search</strong>
+      <i>搜索关健字： <b class="blue">{keyword}</b> ，共有 <b class="red">{totalcount}</b> 条记录</i>
+    </h1>
+    <div class="line20"></div>
+    <ul class="search_list">
+      <%loop dr list%>
+      <li>
+        <a target="_blank" href="{dr[link_url]}">{dr[title]}</a><span>( <%datetostr({dr[add_time]},yyyy-MM-dd)%> )</span>
+        <p>{dr[remark]}</p>
+      </li>
+      <%/loop%>
+    </ul>
+    <div class="clear"></div>
+    <div class="flickr">{pagelist}</div> <!--放置页码列表-->
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

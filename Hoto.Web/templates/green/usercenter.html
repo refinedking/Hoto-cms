@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心 - {config.webname}</title>
+<meta content="{config.webkeyword}" name="keywords">
+<meta content="{config.webdescription}" name="description">
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/calendar.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left180">
+    <!--Sidebar-->
+    <%template src=/_ucenter_nav.html/%>
+    <!--/Sidebar-->
+  </div>
+  
+  <div class="right757">
+    <%if {action}=="index"%>
+    <!--会员中心-->
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","exit")%>">退出</a></span>
+      会员中心
+      <strong>Profile</strong>
+    </h1>
+    <!--会员中心-->
+    <div class="main_head">
+      <div class="avatarbox">
+        <%if {userModel.avatar}!=""%>
+        <img src="{userModel.avatar}" />
+        <%else%>
+        <img src="{config.templateskin}/images/user_avatar.png" alt="求真像" />
+        <%/if%>
+        <span><a href="<%linkurl("usercenter","avatar")%>">设置头像</a></span>
+      </div>
+      <div class="tips_box">
+        <h3>尊敬的<span class="red">{userModel.user_name}</span>，欢迎您！</h3>
+        <dl>
+          <dt>会员等级：</dt>
+          <dd>{groupModel.title}</dd>
+        </dl>
+        <dl>
+          <dt>个人成长值：</dt>
+          <dd>{userModel.exp}点</dd>
+        </dl>
+        
+        <dl>
+          <dt>本次登录IP：</dt>
+          <dd>{curr_login_ip}</dd>
+        </dl>
+        <dl>
+          <dt>上次登录IP：</dt>
+          <dd>{pre_login_ip}</dd>
+        </dl>
+        <dl>
+          <dt>注册时间：</dt>
+          <dd>{userModel.reg_time}</dd>
+        </dl>
+        <dl>
+          <dt>上次登录时间：</dt>
+          <dd>{pre_login_time}</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="line20"></div>
+    <div class="tips_box">
+      <h2>账户统计</h2>
+      <dl>
+        <dt>账户余额：</dt>
+        <dd><b class="red">￥{userModel.amount}</b> 元</dd>
+      </dl>
+      <dl>
+        <dt>账户积分：</dt>
+        <dd><b class="red">{userModel.point}</b> 分</dd>
+      </dl>
+      <dl>
+        <dt>未完成订单：</dt>
+        <dd><b class="red"><%write get_user_order_count("status<3 and user_id="+userModel.id)%></b> 个</dd>
+      </dl>
+      <dl>
+        <dt>未读短信：</dt>
+        <dd><b class="red"><%write get_user_message_count("type<3 and is_read=0 and accept_user_name='"+userModel.user_name+"'")%></b>条</dd>
+      </dl>
+    </div>
+    <!--/会员中心-->
+    <%else if {action}=="password"%>
+    <!--修改密码-->
+    <link rel="stylesheet" href="{config.webpath}css/validate.css" />
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/messages_cn.js"></script>
+    <script type="text/javascript">
+      $(function(){
+	    //初始化表单
+		AjaxInitForm('pwd_form', 'btnSubmit', 1);
+	  });
+    </script>
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","index")%>">管理首页</a></span>
+      修改密码
+      <strong>Password</strong>
+    </h1>
+    <form name="pwd_form" id="pwd_form" url="{config.webpath}tools/submit_ajax.ashx?action=user_password_edit">
+    <div class="form_box">
+      <dl>
+        <dt>用户名：</dt>
+        <dd>{userModel.user_name}</dd>
+      </dl>
+      <dl>
+        <dt>旧密码：</dt>
+        <dd><input name="txtOldPassword" id="txtOldPassword" type="password" class="input txt required" minlength="6" maxlength="50" /></dd>
+      </dl>
+      <dl>
+        <dt>新密码：</dt>
+        <dd><input name="txtPassword" id="txtPassword" type="password" class="input txt required" minlength="6" maxlength="50" /></dd>
+      </dl>
+      <dl>
+        <dt>确认新密码：</dt>
+        <dd><input name="txtPassword1" id="txtPassword1" type="password" class="input txt required" equalTo="#txtPassword" minlength="6" maxlength="20" /></dd>
+      </dl>
+      <dl>
+        <dt></dt>
+        <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn_submit" value="确认修改" /></dd>
+      </dl>
+    </div>
+    </form>
+    <!--/修改密码-->
+    <%else if {action}=="proinfo"%>
+    <!--修改资料-->
+    <link rel="stylesheet" href="{config.webpath}css/validate.css" />
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/messages_cn.js"></script>
+    <script type="text/javascript">
+      $(function(){
+	    //初始化表单
+		AjaxInitForm('info_form', 'btnSubmit', 1);
+	  });
+    </script>
+    <form name="info_form" id="info_form" url="{config.webpath}tools/submit_ajax.ashx?action=user_info_edit">
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","index")%>">管理首页</a></span>
+      个人资料
+      <strong>Information</strong>
+    </h1>
+    
+    <div class="form_box">
+      <dl>
+        <dt>用户名：</dt>
+        <dd>{userModel.user_name}</dd>
+      </dl>
+      <dl>
+        <dt>Email：</dt>
+        <dd><input name="txtEmail" id="txtEmail" type="text" class="input txt required email" maxlength="50" value="{userModel.email}" readonly="readonly" /></dd>
+      </dl>
+      <dl>
+        <dt>昵称：</dt>
+        <dd><input name="txtNickName" id="txtNickName" type="text" class="input txt required" maxlength="50" value="{userModel.nick_name}" /></dd>
+      </dl>
+      <dl>
+        <dt>性别：</dt>
+        <dd>
+          <%if {userModel.sex}=="男"%>
+            <label><input name="rblSex" type="radio" value="男" checked="checked" />男</label> 
+            <label><input name="rblSex" type="radio" value="女" />女</label>
+            <label><input name="rblSex" type="radio" value="保密" />保密</label>
+            <%else if {userModel.sex}=="女"%>
+            <label><input name="rblSex" type="radio" value="男" />男</label>
+            <label><input name="rblSex" type="radio" value="女" checked="checked" />女</label>
+            <label><input name="rblSex" type="radio" value="保密" />保密</label>
+            <%else%>
+            <label><input name="rblSex" type="radio" value="男" />男</label>
+            <label><input name="rblSex" type="radio" value="女" />女</label>
+            <label><input name="rblSex" type="radio" value="保密" checked="checked" />保密</label>
+            <%/if%>
+        </dd>
+      </dl>
+      <dl>
+        <dt>生日：</dt>
+        <dd>
+          <%if {userModel.birthday}==null%>
+          <input name="txtBirthday" id="txtBirthday" type="text" class="input txt required dateISO" maxlength="30" onclick="return Calendar('txtBirthday');" />
+          <%else%>
+          <input name="txtBirthday" id="txtBirthday" type="text" class="input txt required dateISO" maxlength="30" onclick="return Calendar('txtBirthday');" value="<%datetostr({userModel.birthday},yyyy-M-d)%>" />
+          <%/if%>
+        </dd>
+      </dl>
+      <dl>
+        <dt>联系电话：</dt>
+        <dd><input name="txtTelphone" id="txtTelphone" type="text" class="input txt" maxlength="50" value="{userModel.telphone}" /></dd>
+      </dl>
+      <dl>
+        <dt>手机号码：</dt>
+        <dd><input name="txtMobile" id="txtMobile" type="text" class="input txt" maxlength="20" value="{userModel.mobile}" /></dd>
+      </dl>
+      <dl>
+        <dt>在线QQ：</dt>
+        <dd><input name="txtQQ" id="txtQQ" type="text" class="input txt" maxlength="20" value="{userModel.qq}" /></dd>
+      </dl>
+      <dl>
+        <dt>联系地址：</dt>
+        <dd><input name="txtAddress" id="txtAddress" type="text" class="input wide" maxlength="250" value="{userModel.address}" /></dd>
+      </dl>
+      <dl>
+        <dt></dt>
+        <dd><input name="btnSubmit" id="btnSubmit" type="submit" class="btn_submit" value="确认修改" /></dd>
+      </dl>
+    </div>
+    </form>
+    <!--/修改资料-->
+    <%else if {action}=="avatar"%>
+    <!--设置头像-->
+    <link rel="stylesheet" href="{config.webpath}css/jquery.Jcrop.css" type="text/css" />
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.form.js"></script>
+    <script src="{config.webpath}scripts/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
+    <script src="{config.templateskin}/js/avatar.js" type="text/javascript"></script>
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","index")%>">管理首页</a></span>
+      头像设置
+      <strong>Avatar</strong>
+    </h1>
+    
+    <strong>当前我的头像</strong>
+    <p>如果您还没有设置自己的头像，系统会显示为默认头像，您需要自己上传一张新照片来作为自己的个人头像。</p>
+    <div class="img_box">
+      <%if {userModel.avatar}!=""%>
+        <img src="{userModel.avatar}" width="180" height="180" />
+      <%else%>
+        <img src="{config.templateskin}/images/user_avatar.png" width="180" height="180" />
+      <%/if%>
+    </div>
+    <strong>设置我的新头像</strong>
+    <p>上传成功后，请裁剪合适的头像确认保存后才能生效。</p>
+    <form id="upload_form" name="upload_form">
+      <div class="avatar_upload">
+        <a href="javascript:;" class="files"><input type="file" id="FileUpload" name="FileUpload" onchange="Upload('{config.webpath}');" /></a>
+        <span class="uploading">正在上传，请稍候...</span>
+      </div>
+      <div class="clear"></div>
+      <div class="avatar_box">
+        <div class="avatar_big_warp">
+          <div class="avatar_big_box">
+            <div class="avatar_big_pic">
+              <img id="target" src="{config.templateskin}/images/pic_bg.png" />
+            </div>
+          </div>
+        </div>
+        <div class="avatar_small_warp">
+          <div class="avatar_small_box">
+            <div class="avatar_small_pic"><img id="preview" src="{config.templateskin}/images/pic_bg.png" /></div>
+          </div>
+          <p style="text-align:center;"><strong>头像预览区</strong></p>
+          <p style="text-align:center;"><input id="btnSubmit" name="btnSubmit" type="button" class="btn btn-success" value="确定保存" onclick="CropSubmit('{config.webpath}');return false;" /></p>
+          <p>提示：生成头像大小180*180相素上传图片后，左侧选取图片合适大小，点击下面的保存按钮。</p>
+        </div>
+      </div>
+      <input id="hideFileName" name="hideFileName" type="hidden" />
+      <input id="hideX1" name="hideX1" type="hidden" value="0" />
+      <input id="hideY1" name="hideY1" type="hidden" value="0" />
+      <input id="hideWidth" name="hideWidth" type="hidden" value="0" />
+      <input id="hideHeight" name="hideHeight" type="hidden" value="0" />
+    </form>
+    <!--/设置头像-->
+    <%else if {action}=="invite"%>
+    <!--邀请码-->
+    <h1 class="main_tit">
+      <span><a href="javascript:;" onclick="clickSubmit('{config.webpath}tools/submit_ajax.ashx?action=user_invite_code');">申请邀请码</a></span>
+      我的邀请码
+      <strong>Invite</strong>
+    </h1>
+    
+    <p>说明：您购买的邀请码会在失效之后由系统定时清理，不会长期驻留在列表中</p>
+    <div class="line10"></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+      <tr>
+        <th align="left">邀请码</th>
+        <th width="150">申请时间</th>
+        <th width="150">过期时间</th>
+        <th width="80">已使用次数</th>
+        <th width="80">状态</th>
+      </tr>
+      <%set (DataTable){list1}=get_user_invite_list(0, "user_name='"+userModel.user_name+"'")%> <!--取得一个DataTable-->
+      <%loop dr list1%>
+      <tr>
+        <td>{dr[str_code]} &nbsp; <a href="javascript:;" onclick="copyText('邀请码：{dr[str_code]}');">[复制]</a></td>
+        <td align="center">{dr[add_time]}</td>
+        <td align="center">
+          <%if {dr[eff_time]}==""%>
+          无限制
+          <%else%>
+          {dr[eff_time]}
+          <%/if%>
+        </td>
+        <td align="center">{dr[count]}</td>
+        <td align="center">
+          <%if get_invite_status({dr[str_code]})%>
+          有效
+          <%else%>
+          已失效
+          <%/if%>
+        </td>
+      </tr>
+      <%/loop%>
+      <%if list1.Rows.Count<1%>
+      <tr><td align="center" colspan="5">暂无记录</td></tr>
+      <%/if%>
+    </table>
+    <!--/邀请码-->
+    <%/if%>
+    
+  </div>
+  <div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

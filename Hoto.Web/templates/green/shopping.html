@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>购物中心－{config.webname}</title>
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/cart.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="cart_box">
+    <%if action=="cart"%>
+    <!--购物车-->
+    <h1 class="main_tit">
+      <span><a onclick="DeleteCart(this,'{config.webpath}','0');" href="javascript:;">清空购物车</a></span>
+      我的购物车<strong>Shopping Cart</strong>
+    </h1>
+    <div class="cart_step">
+      <ul>
+        <li class="selected"><span>1</span>放进购物车</li>
+        <li><span>2</span>填写订单信息</li>
+        <li class="last"><span>3</span>支付/确定订单</li>
+      </ul>
+    </div>
+    <div class="line20"></div>
+    
+    <table width="938" border="0" align="center" cellpadding="8" cellspacing="0" class="cart_table">
+      <tr>
+        <th width="64"></th>
+        <th align="left">商品名称</th>
+        <th width="80" align="center">积分</th>
+        <th width="80" align="center">单价</th>
+        <th width="80" align="center">数量</th>
+        <th width="80" align="center">优惠</th>
+        <th width="100" align="center">金额小计</th>
+        <th width="100" align="center">积分小计</th>
+        <th width="50" align="center">操作</th>
+      </tr>
+      <%set (IList<DTcms.Model.cart_items>){ls1}=get_cart_list()%>
+      <%loop (DTcms.Model.cart_items) modelt ls1%>
+      <tr>
+        <td><a target="_blank" href="<%linkurl("goods_show",{modelt.id})%>"><img src="{modelt.img_url}" class="img" /></a></td>
+        <td><a target="_blank" href="<%linkurl("goods_show",{modelt.id})%>">{modelt.title}</a></td>
+        <td align="center">
+          <%if modelt.point>0%>
+          +
+          <%/if%>
+          {modelt.point}
+        </td>
+        <td align="center">￥{modelt.price}<input name="goods_price" type="hidden" value="{modelt.user_price}" /></td>
+        <td align="center">
+          <a href="javascript:;" class="reduce" title="减一" onclick="CartComputNum(this, '{config.webpath}', '{modelt.id}', -1);">减一</a>
+          <input type="text" name="goods_quantity" class="input" style="width:30px;text-align:center;ime-mode:Disabled;" value="{modelt.quantity}" onblur="CartAmountTotal(this, '{config.webpath}', '{modelt.id}');" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" />
+          <a href="javascript:;" class="subjoin" title="加一" onclick="CartComputNum(this,'{config.webpath}', '{modelt.id}', 1);">加一</a>
+        </td>
+        <td align="center">￥<label name="discount_amount"><%write ((modelt.price-modelt.user_price)*modelt.quantity)%></label></td>
+        <td align="center"><font color="#FF0000" size="2">￥<label name="real_amount"><%write (modelt.user_price*modelt.quantity)%></label></font></td>
+        <td align="center">
+          <font color="#FF0000" size="2">
+            <%if modelt.point>0%>
+            +
+            <%/if%>
+            <label name="point_count"><%write (modelt.point*modelt.quantity)%></label>
+          </font>
+        </td>
+        <td align="center"><a onclick="DeleteCart(this,'{config.webpath}','{modelt.id}');" href="javascript:;">删除</a></td>
+      </tr>
+      <%/loop%>
+      <%if ls1.Count<1%>
+      <tr>
+        <td colspan="9">
+          <div class="msg_tips">
+            <div class="ico warning"></div>
+            <div class="msg">
+              <strong>购物车没有商品！</strong>
+              <p>您的购物车为空，<a href="<%linkurl("index")%>">马上去购物</a>吧！</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <%/if%>
+      <tr>
+        <th colspan="9" align="right">
+          商品件数：{cartModel.total_quantity} 件 &nbsp;&nbsp; 商品总金额（不含运费）：<font color="#FF0000" size="2">￥{cartModel.real_amount}</font>元 &nbsp;&nbsp; 总积分：<font color="#FF0000" size="2">{cartModel.total_point}分</font>
+        </th>
+      </tr>
+      
+	</table>
+    <div class="line20"></div>
+    <div class="right">
+      <a class="btn" href="<%linkurl("index")%>">继续购物</a>
+      <%if {cartModel.total_quantity}==0%>
+      <a class="btn btn-gray">不能结算</a>
+      <%else%>
+      <a class="btn btn-success marL10" href="<%linkurl("shopping","confirm")%>">马上去结算</a>
+      <%/if%>
+    </div>
+    <div class="clear"></div>
+    <!--/购物车-->
+    
+    <%else if action=="confirm"%>
+    <link rel="stylesheet" href="{config.webpath}css/validate.css" />
+	<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.form.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="{config.webpath}scripts/jquery/messages_cn.js"></script>
+    <script type="text/javascript">
+      $(function () {
+          //表单提交
+          AjaxInitForm('order_form', 'btnSubmit', 0);
+      });
+    </script>
+    <!--结算中心-->
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("shopping","cart")%>">返回</a></span>
+      确认订单信息<strong>Confirm order</strong>
+    </h1>
+    <div class="cart_step">
+      <ul>
+        <li class="item"><span>1</span>放进购物车</li>
+        <li class="selected"><span>2</span>填写订单信息</li>
+        <li class="last"><span>3</span>支付/确定订单</li>
+      </ul>
+    </div>
+    <div class="line20"></div>
+    
+    <form name="order_form" id="order_form" url="{config.webpath}tools/submit_ajax.ashx?action=order_save">
+    <h3 class="bar_tit">1、收货信息</h3>
+    <div class="form_box">
+      <dl>
+        <dt>收货人姓名：</dt>
+        <dd><input name="accept_name" id="accept_name" type="text" class="input txt wide required" maxlength="50" value="{userModel.nick_name}" /><em>*收货人姓名</em></dd>
+      </dl>
+      <dl>
+        <dt>收货地址：</dt>
+        <dd><input name="address" id="address" type="text" class="input txt required" maxlength="100" value="{userModel.address}" style="width:300px;" /><em>*收货人的详细地址</em></dd>
+      </dl>
+      <dl>
+        <dt>邮政编码：</dt>
+        <dd><input name="post_code" id="post_code" type="txt" class="input txt" /><em>所在地区的邮政编码，非必填</em></dd>
+      </dl>
+      <dl>
+        <dt>手机号码：</dt>
+        <dd><input name="mobile" id="mobile" type="text" class="input txt required" value="{userModel.mobile}" /><em>*收货人的手机号码</em></dd>
+      </dl>
+      <dl>
+        <dt>联系电话：</dt>
+        <dd><input name="telphone" id="telphone" type="text" class="input txt" value="{userModel.telphone}" /><em>收货人的联系电话，非必填</em></dd>
+      </dl>
+    </div>
+    
+    <div class="line20"></div>
+    <h3 class="bar_tit">2、支付方式</h3>
+    <div class="form_box">
+      <%set (DataTable){list1}=get_payment_list(0, "is_lock=0")%> <!--取得一个DataTable-->
+      <%loop dr1 list1%>
+      <%set (decimal){poundage_amount}=get_payment_poundage_amount({strtoint({dr1[id]})})%>
+      <dl>
+        <dt><label><input name="payment_id" type="radio" onclick="PaymentAmountTotal(this);" value="{dr1[id]}" /><input name="payment_price" type="hidden" value="{poundage_amount}" /><img src="{dr1[img_url]}" /></label></dt>
+        <dd>手续费：{poundage_amount}元<br />{dr1[remark]}</dd>
+      </dl>
+      <%/loop%>
+    </div>
+    
+    <div class="line20"></div>
+    <h3 class="bar_tit">3、配送方式</h3>
+    <div class="form_box">
+      <%set (DataTable){list2}=get_distribution_list(0, "is_lock=0")%> <!--取得一个DataTable-->
+      <%loop dr2 list2%>
+      <dl>
+        <dt><label><input  name="distribution_id" type="radio" onclick="FreightAmountTotal(this);" value="{dr2[id]}" /><input name="distribution_price" type="hidden" value="{dr2[amount]}" />{dr2[title]}</label></dt>
+        <dd>费用：{dr2[amount]}元<br />{dr2[remark]}</dd>
+      </dl>
+      <%/loop%>
+    </div>
+    
+    <div class="line20"></div>
+    <h3 class="bar_tit">4、商品清单</h3>
+    <table width="938" border="0" align="center" cellpadding="8" cellspacing="0" class="cart_table">
+      <tr>
+        <th width="64"></th>
+        <th align="left">商品名称</th>
+        <th width="80" align="center">积分</th>
+        <th width="80" align="center">单价</th>
+        <th width="80" align="center">数量</th>
+        <th width="80" align="center">优惠</th>
+        <th width="100" align="center">金额小计</th>
+        <th width="100" align="center">积分小计</th>
+      </tr>
+      <%set (IList<DTcms.Model.cart_items>){ls2}=get_cart_list()%>
+      <%loop (DTcms.Model.cart_items) modelt ls2%>
+      <tr>
+        <td><a target="_blank" href="<%linkurl("goods_show",{modelt.id})%>"><img src="{modelt.img_url}" class="img" /></a></td>
+        <td><a target="_blank" href="<%linkurl("goods_show",{modelt.id})%>">{modelt.title}</a></td>
+        <td align="center">
+          <%if modelt.point>0%>
+          +
+          <%/if%>
+          {modelt.point}
+        </td>
+        <td align="center">￥{modelt.price}<input name="goods_price" type="hidden" value="{modelt.user_price}" /></td>
+        <td align="center">{modelt.quantity}</td>
+        <td align="center">￥<label name="discount_amount"><%write ((modelt.price-modelt.user_price)*modelt.quantity)%></label></td>
+        <td align="center"><font color="#FF0000" size="2">￥<label name="real_amount"><%write (modelt.user_price*modelt.quantity)%></label></font></td>
+        <td align="center">
+          <font color="#FF0000" size="2">
+            <%if modelt.point>0%>
+            +
+            <%/if%>
+            <label name="point_count"><%write (modelt.point*modelt.quantity)%></label>
+            </font>
+        </td>
+      </tr>
+      <%/loop%>
+      <%if ls2.Count<1%>
+      <tr>
+        <td colspan="8">
+          <div class="msg_tips">
+            <div class="ico warning"></div>
+            <div class="msg">
+              <strong>购物车没有商品！</strong>
+              <p>您的购物车为空，<a href="<%linkurl("index")%>">马上去购物</a>吧！</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <%/if%>
+	</table>
+    
+    <div class="line20"></div>
+    <h3 class="bar_tit">5、结算信息</h3>
+    <div>
+      <div class="left">
+        <h4>订单留言<span>字数控制在100个字符内</span></h4>
+        <textarea name="message" class="input" style="width:250px;height:35px;"></textarea>
+      </div>
+      
+      <div class="right" style="text-align:right;line-height:40px;">
+        商品件数：<font color="#FF0000">{cartModel.total_quantity}</font> 件 &nbsp; &nbsp;&nbsp;总积分：<font color="#FF0000">{cartModel.total_point}</font> 分 &nbsp; &nbsp;&nbsp;商品金额：<font color="#FF0000">￥<label id="goods_amount">{cartModel.real_amount}</label></font>&nbsp; &nbsp;+ &nbsp; 运费：<font color="#FF0000">￥<label id="freight_amount">0.00</label></font>&nbsp; &nbsp;+ &nbsp; 支付手续费：<font color="#FF0000">￥<label id="payment_fee">0.00</label></font>
+        
+        <br />
+        <b class="font18">应付总金额：<font color="#FF0000">￥<label id="order_amount">{cartModel.real_amount}</label></font></b>
+      </div>
+    </div>
+
+    <div class="line20"></div>
+    <div class="right">
+      <a class="btn" href="<%linkurl("shopping","cart")%>">返回修改</a>
+      <%if get_cart_quantity()>0%>
+      <input id="btnSubmit" name="btnSubmit" type="submit" value="确认提交" class="btn btn-success marL10" />
+      <%else%>
+      <a class="btn btn-gray marL10">确认提交</a>
+      <%/if%>
+    </div>
+    <div class="clear"></div>
+    <!--/结算中心-->
+    <%/if%>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新闻资讯 - {config.webname}</title>
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.KinSlideshow-1.2.1.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#focusNews").KinSlideshow();
+})
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+   <!--Content-->
+    <div class="main_box">
+      <div class="left300">
+        <div id="focusNews" class="ifocus">
+          <%set (DataTable){focusNews}=get_news_list(channel_id, 0, 8, "is_slide=1")%>
+          <%loop newsdr focusNews%>
+          <a title="{newsdr[title]}" href="<%linkurl("news_show",{newsdr[id]})%>"><img src="{newsdr[img_url]}" alt="{newsdr[title]}" /></a>
+          <%/loop%>
+        </div>
+      </div>
+      <div class="right350">
+        <div class="newsToppic">
+          <dl>
+            <%set (DataTable){topNews}=get_news_list(channel_id, 0, 8, "")%>
+            <%loop topdr topNews%>
+            <%if topdr__loop__id==1%>
+            <dt>
+              <strong><a title="{topdr[title]}" href="<%linkurl("news_show",{topdr[id]})%>">{topdr[title]}</a></strong>
+              <p><%cutstring({topdr[zhaiyao]},150)%><a href="<%linkurl("news_show",{topdr[id]})%>">[详细]</a></p>
+            </dt>
+            <%else%>
+            <dd><span><%datetostr({topdr[add_time]},MM-dd)%></span><a title="{topdr[title]}" href="<%linkurl("news_show",{topdr[id]})%>">{topdr[title]}</a></dd>
+            <%/if%>
+            <%/loop%>
+          </dl>
+        </div>
+      </div>
+      
+      <!--分类资讯-->
+      <%set (DataTable){category_list}=get_category_child_list(channel_id, 0)%>
+      <%loop cdr category_list%>
+      <div class="line20"></div>
+      <%if cdr__loop__id==1%>
+      <dl class="head green">
+      <%else%>
+      <dl class="head blue">
+      <%/if%>
+        <dt>{cdr[title]}</dt>
+        <dd>
+          <span><a href="<%linkurl("news_list",{cdr[id]})%>" title="查看更多" class="arrow">&gt;</a></span>
+        </dd>
+      </dl>
+      <div class="line10"></div>
+      <div class="newsToplist">
+        <div class="list">
+          <div class="left325">
+            <dl>
+              <%set (DataTable){listNews}=get_news_list(channel_id, {strtoint({cdr[id]})}, 13, "")%>
+              <%loop listdr1 listNews%>
+              <%if listdr1__loop__id<=3%>
+              <dt>
+                <a title="{listdr1[title]}" href="<%linkurl("news_show",{listdr1[id]})%>"><img width="110" height="110" src="{listdr1[img_url]}" alt="{listdr1[title]}" /></a>
+                <strong><a href="<%linkurl("news_show",{listdr1[id]})%>">{listdr1[title]}</a></strong>
+                <p><%cutstring({listdr1[zhaiyao]},110)%></p>
+              </dt>
+              <%/if%>
+              <%/loop%>
+            </dl>
+          </div>
+          <div class="right325">
+            <dl>
+              <%loop listdr2 listNews%>
+              <%if listdr2__loop__id>3%>
+              <dd><span><%datetostr({listdr2[add_time]},MM-dd)%></span><a title="{listdr2[title]}" href="<%linkurl("news_show",{listdr2[id]})%>">{listdr2[title]}</a></dd>
+              <%/if%>
+              <%/loop%>
+            </dl>
+          </div>
+   
+        </div>
+      </div>
+      <%/loop%>
+      <!--/分类资讯-->
+      
+    </div>
+    <!--/Content-->
+  </div>
+  
+  <div class="left264">
+    <!--Sidebar-->
+    <div class="sidebar">
+      <h3>推荐资讯</h3>
+      <ul class="newsRedlist">
+        <%set (DataTable){rednews1}=get_news_list(channel_id, 0, 10, "is_red=1")%>
+        <%loop reddr1 rednews1%>
+        <li><a title="{reddr1[title]}" href="<%linkurl("news_show",{reddr1[id]})%>"><%cutstring({reddr1[title]},38)%></a></li>
+        <%/loop%>
+      </ul>
+      <h3>图片资讯</h3>
+      <div class="focus_list">
+        <ul>
+          <%set (DataTable){rednews2}=get_news_list(channel_id, 0, 9, "img_url<>''")%>
+          <%loop reddr2 rednews2%>
+          <li>
+            <a title="{reddr2[title]}" href="<%linkurl("news_show",{reddr2[id]})%>">
+              <img src="{reddr2[img_url]}" width="100" height="100" alt="{reddr2[title]}" />
+              <span>{reddr2[title]}</span>
+            </a>
+          </li>
+          <%/loop%>
+        </ul>
+        <div class="clear"></div>
+      </div>
+      <h3>人气排行</h3>
+      <ul class="rank_list">
+        <%set (DataTable){hotphoto}=get_news_list(channel_id, 0, 10, "", "click desc,id desc")%>
+        <%loop hotdr hotphoto%>
+        <%if hotdr__loop__id==1%>
+        <li class="active">
+        <%else%>
+        <li>
+        <%/if%>
+          <span><%datetostr({hotdr[add_time]},MM-dd)%></span>
+          <i class="num"><%write hotdr__loop__id%></i><a href="<%linkurl("news_show",{hotdr[id]})%>">{hotdr[title]}</a>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+    <!--/Sidebar-->
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

@@ -1,0 +1,16 @@
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.Web.UI.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.Web.UI.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.BLL.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\hoto.Common.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.Model.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\LitJSON.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.DAL.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\hoto.DBUnility.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.BLL.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\hoto.Common.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.Model.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\Hoto.DAL.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\bin\Debug\hoto.DBUnility.pdb
+F:\VS2010\C#\hoto\Hoto.Web.UI\obj\Debug\Hoto.Web.UI.csprojResolveAssemblyReference.cache
+F:\VS2010\C#\hoto\Hoto.Web.UI\obj\Debug\Hoto.Web.UI.dll
+F:\VS2010\C#\hoto\Hoto.Web.UI\obj\Debug\Hoto.Web.UI.pdb

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我的订单 - {config.webname}</title>
+<meta content="{config.webkeyword}" name="keywords">
+<meta content="{config.webdescription}" name="description">
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link rel="stylesheet" href="{config.webpath}css/pagination.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left180">
+    <!--Sidebar-->
+    <%template src=/_ucenter_nav.html/%>
+    <!--/Sidebar-->
+  </div>
+  
+  <div class="right757">
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","index")%>">管理首页</a></span>
+      我的订单
+      <strong>Order</strong>
+    </h1>
+    <%if {action}=="list"%>
+    <!--交易订单-->
+    <div class="tab_head">
+      <ul class="tabs">
+        <li class="selected"><a href="<%linkurl("userorder","list")%>">交易订单</a></li>
+        <li><a href="<%linkurl("userorder","close")%>">已关闭订单</a></li>
+      </ul>
+    </div>
+    
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+      <tr>
+        <th width="16%" align="left">订单号</th>
+        <th align="left">订单商品</th>
+        <th width="10%">收货人</th>
+        <th width="12%">订单金额</th>
+        <th width="11%">下单时间</th>
+        <th width="10%">订单状态</th>
+        <th width="12%">操作</th>
+      </tr>
+      <%set (DataTable){list1}=get_order_list(10, page, "user_id='"+userModel.id+"' and status<=3", out totalcount)%> <!--取得一个DataTable-->
+      <%set (string){pagelist1}=get_page_link(10, page, totalcount, "userorder1", action, "__id__")%> <!--取得分页页码列表-->
+      <%loop dr list1%>
+      <tr>
+        <td>{dr[order_no]}</td>
+        <td>
+          <%set (List<DTcms.Model.article_goods>){ls}=get_order_goods_list({strtoint({dr[id]})})%>
+          <%if ls!=null%>
+          <%loop (DTcms.Model.article_goods) modelt ls%>
+          <a target="_blank" title="{modelt.title}" href="<%linkurl("goods_show",{modelt.id})%>"><img width="60" height="60" alt="{modelt.title}" src="{modelt.img_url}"></a>
+          <%/loop%>
+          <%/if%>
+        </td>
+        <td align="center">{dr[accept_name]}</td>
+        <td align="center"><strong>￥{dr[order_amount]}</strong><br /><%write get_payment_title({strtoint({dr[payment_id]})})%></td>
+        <td align="center">{dr[add_time]}</td>
+        <td align="center">
+          <%write get_order_status({strtoint({dr[id]})})%>
+        </td>
+        <td align="center">
+          <a href="<%linkurl("userorder_show",{dr[id]})%>">查看订单</a><br />
+          <%if get_order_payment_status({strtoint({dr[id]})})%>
+          <a href="<%linkurl("payment1","confirm","BuyGoods",{dr[order_no]})%>">去付款</a> |
+          <%/if%>
+          <%if {strtoint({dr[status]})}<2%>
+          <a href="javascript:;" onclick="clickSubmit('{config.webpath}tools/submit_ajax.ashx?action=order_cancel&order_no={dr[order_no]}');">取消</a>
+          <%/if%>
+        </td>
+      </tr>
+      <%/loop%>
+      <%if totalcount<1%>
+      <tr><td colspan="8" align="center">暂无记录</td></tr>
+      <%/if%>
+    </table>
+    
+    <div class="page_foot">
+      <div class="flickr right"></div><!--放置页码列表-->
+    </div>
+    <!--交易订单-->
+    
+    <%else if {action}=="close"%>
+    <div class="tab_head">
+      <ul class="tabs">
+        <li><a href="<%linkurl("userorder","list")%>">交易订单</a></li>
+        <li class="selected"><a href="<%linkurl("userorder","close")%>">已关闭订单</a></li>
+      </ul>
+    </div>
+    
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ftable">
+      <tr>
+        <th width="16%" align="left">订单号</th>
+        <th align="left">订单商品</th>
+        <th width="10%">收货人</th>
+        <th width="12%">订单金额</th>
+        <th width="11%">下单时间</th>
+        <th width="10%">订单状态</th>
+        <th width="12%">操作</th>
+      </tr>
+      <%set (DataTable){list2}=get_order_list(10, page, "user_id='"+userModel.id+"' and status>3", out totalcount)%> <!--取得一个DataTable-->
+      <%set (string){pagelist2}=get_page_link(10, page, totalcount, "userorder1", action, "__id__")%> <!--取得分页页码列表-->
+      <%loop dr list2%>
+      <tr>
+        <td>{dr[order_no]}</td>
+        <td>
+          <%set (List<DTcms.Model.article_goods>){ls}=get_order_goods_list({strtoint({dr[id]})})%>
+          <%if ls!=null%>
+          <%loop (DTcms.Model.article_goods) modelt ls%>
+          <a target="_blank" title="{modelt.title}" href="<%linkurl("goods_show",{modelt.id})%>"><img width="60" height="60" alt="{modelt.title}" src="{modelt.img_url}"></a>
+          <%/loop%>
+          <%/if%>
+        </td>
+        <td align="center">{dr[accept_name]}</td>
+        <td align="center"><strong>￥{dr[order_amount]}</strong><br /><%write get_payment_title({strtoint({dr[payment_id]})})%></td>
+        <td align="center">{dr[add_time]}</td>
+        <td align="center"><%write get_order_status({strtoint({dr[id]})})%></td>
+        <td align="center"><a href="<%linkurl("userorder_show",{dr[id]})%>">查看订单</a></td>
+      </tr>
+      <%/loop%>
+      <%if totalcount<1%>
+      <tr><td colspan="8" align="center">暂无记录</td></tr>
+      <%/if%>
+    </table>
+    
+    <div class="page_foot">
+      <div class="flickr right">{pagelist2}</div><!--放置页码列表-->
+    </div>
+    <%/if%>
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

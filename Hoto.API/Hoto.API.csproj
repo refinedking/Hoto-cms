@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7572BDC2-9AEC-473C-8E22-5760C2AAAF3C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hoto.API</RootNamespace>
+    <AssemblyName>Hoto.API</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LitJSON">
+      <HintPath>..\..\..\LitJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OAuth\feixin_helper.cs" />
+    <Compile Include="OAuth\kaixin_helper.cs" />
+    <Compile Include="OAuth\oauth_config.cs" />
+    <Compile Include="OAuth\oauth_helper.cs" />
+    <Compile Include="OAuth\qq_helper.cs" />
+    <Compile Include="OAuth\renren_helper.cs" />
+    <Compile Include="OAuth\sina_helper.cs" />
+    <Compile Include="OAuth\taobao_helper.cs" />
+    <Compile Include="Payment\Alipay\AlipayConfig.cs" />
+    <Compile Include="Payment\Alipay\AlipayCore.cs" />
+    <Compile Include="Payment\Alipay\AlipayNotify.cs" />
+    <Compile Include="Payment\Alipay\AlipayService.cs" />
+    <Compile Include="Payment\Alipay\AlipaySubmit.cs" />
+    <Compile Include="Payment\Tenpay\ClientResponseHandler.cs" />
+    <Compile Include="Payment\Tenpay\MD5Util.cs" />
+    <Compile Include="Payment\Tenpay\RequestHandler.cs" />
+    <Compile Include="Payment\Tenpay\ResponseHandler.cs" />
+    <Compile Include="Payment\Tenpay\TenpayHttpClient.cs" />
+    <Compile Include="Payment\Tenpay\TenpayUtil.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hoto.BLL\Hoto.BLL.csproj">
+      <Project>{6FAD0D4C-7244-4AF3-A2BA-A78AB462F1C2}</Project>
+      <Name>Hoto.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hoto.Common\Hoto.Common.csproj">
+      <Project>{0EDB2A3B-7284-438E-82A5-8BAD07BEE429}</Project>
+      <Name>Hoto.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hoto.Model\Hoto.Model.csproj">
+      <Project>{48EB2C8C-0FB5-4C7D-8EFD-0EDC07834A00}</Project>
+      <Name>Hoto.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

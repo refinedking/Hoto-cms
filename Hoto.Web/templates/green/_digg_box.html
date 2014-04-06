@@ -1,0 +1,30 @@
+﻿  <div class="newdigg" id="newdigg">
+    <div id="digg_good" class="diggbox digg_good">
+      <div class="digg_act">顶一下</div>
+      <div class="digg_num">({model.digg_good})</div>
+      <div class="digg_percent">
+        <%csharp%>
+        decimal good_num = 0;
+        if(model.digg_good>0){
+          good_num = decimal.Round((decimal)model.digg_good/(model.digg_good + model.digg_bad)*100,1);
+        }
+        <%/csharp%>
+        <div class="digg_percent_bar"><span style="width:{good_num}%"></span></div>
+        <div class="digg_percent_num">{good_num}%</div>
+      </div>
+    </div>
+    <div id="digg_bad" class="diggbox digg_bad">
+      <div class="digg_act">踩一下</div>
+      <div class="digg_num">({model.digg_bad})</div>
+      <div class="digg_percent">
+        <%csharp%>
+        decimal bad_num = 0;
+        if(model.digg_bad>0){
+          bad_num = decimal.Round((decimal)model.digg_bad/(model.digg_good + model.digg_bad)*100,1);
+        }
+        <%/csharp%>
+        <div class="digg_percent_bar"><span style="width:{bad_num}%"></span></div>
+        <div class="digg_percent_num">{bad_num}%</div>
+      </div>
+    </div>
+  </div>

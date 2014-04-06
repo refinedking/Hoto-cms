@@ -1,0 +1,4 @@
+F:\VS2010\C#\hoto\Hoto.DBUnility\bin\Debug\hoto.DBUnility.dll
+F:\VS2010\C#\hoto\Hoto.DBUnility\bin\Debug\hoto.DBUnility.pdb
+F:\VS2010\C#\hoto\Hoto.DBUnility\obj\Debug\hoto.DBUnility.dll
+F:\VS2010\C#\hoto\Hoto.DBUnility\obj\Debug\hoto.DBUnility.pdb

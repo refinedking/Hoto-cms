@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>查看站内短信息 - {config.webname}</title>
+<meta content="{config.webkeyword}" name="keywords">
+<meta content="{config.webdescription}" name="description">
+<link rel="stylesheet" href="{config.webpath}scripts/ui/skins/Aqua/css/ligerui-all.css" />
+<link rel="stylesheet" href="{config.webpath}css/pagination.css" />
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/ui/js/ligerBuild.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript">
+	function ExecPostBack(checkValue) {
+		ExecDelete('{config.webpath}tools/submit_ajax.ashx?action=user_message_delete',checkValue);
+    }
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left180">
+    <!--Sidebar-->
+    <%template src=/_ucenter_nav.html/%>
+    <!--/Sidebar-->
+  </div>
+  
+  <div class="right757">
+    <h1 class="main_tit">
+      <span><a href="<%linkurl("usercenter","index")%>">管理首页</a></span>
+      站内短信
+      <strong>Message</strong>
+    </h1>
+    <div class="tab_head">
+      <a class="add" href="<%linkurl("usermessage","add")%>">+ 写新消息</a>
+      <ul class="tabs">
+        <%if {model.type}==2%>
+        <li class="selected"><a href="<%linkurl("usermessage","accept")%>">收件箱</a></li>
+        <%else%>
+        <li><a href="<%linkurl("usermessage","accept")%>">收件箱</a></li>
+        <%/if%>
+        <%if {model.type}==1%>
+        <li class="selected"><a href="<%linkurl("usermessage","system")%>">系统消息</a></li>
+        <%else%>
+        <li><a href="<%linkurl("usermessage","system")%>">系统消息</a></li>
+        <%/if%>
+        <%if {model.type}==3%>
+        <li class="selected"><a href="<%linkurl("usermessage","send")%>">发件箱</a></li>
+        <%else%>
+        <li><a href="<%linkurl("usermessage","send")%>">发件箱</a></li>
+        <%/if%>
+      </ul>
+    </div>
+    <div class="line10"></div>
+    <div class="ntitle">
+      <h1 class="ntitle-tit">{model.title}</h1>
+      <p class="ntitle-info">
+          <span class="time">{model.post_time}</span>
+          <%if {model.type}==2%>
+          发件人：{model.post_user_name}&nbsp;&nbsp;&nbsp;
+          <%else if {model.type}==3%>
+          收件人：{model.accept_user_name}&nbsp;&nbsp;&nbsp;
+          <%/if%>
+      </p>
+    </div>
+    <div class="entry">
+      {model.content}
+    </div>
+
+  </div>
+</div>
+
+<div class="clear"></div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>

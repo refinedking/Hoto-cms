@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{config.webtitle}</title>
+<meta content="{config.webkeyword}" name="keywords">
+<meta content="{config.webdescription}" name="description">
+<link media="screen" type="text/css" href="{config.templateskin}/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="{config.webpath}scripts/jquery/jquery.KinSlideshow-1.2.1.min.js"></script>
+<script type="text/javascript" src="{config.templateskin}/js/base.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#focusNews").KinSlideshow();
+})
+</script>
+</head>
+
+<body>
+<!--Header-->
+<%template src=/_header.html/%>
+<!--/Header-->
+
+<div class="boxwrap">
+  <div class="left710">
+    <div class="pad20">
+      <!--Focus-->
+      <div class="left300">
+        <div id="focusNews" class="ifocus">
+          <%set (DataTable){focusNews}=get_news_list(1, 0, 8, "is_lock=0 and is_slide=1")%>
+          <%loop newsdr focusNews%>
+          <a title="{newsdr[title]}" target="_blank" href="<%linkurl("news_show",{newsdr[id]})%>"><img src="{newsdr[img_url]}" alt="{newsdr[title]}" /></a>
+          <%/loop%>
+        </div>
+      </div>
+      <!--/Focus-->
+      <!--Top News-->
+      <div class="right350 icnts">
+        <%set (DataTable){topnews}=get_news_list(1, 0, 2, "is_lock=0 and is_top=1")%>
+        <%loop newsdr1 topnews%>
+        <%if newsdr1__loop__id==1%>
+        <h3 class="tit"><a title="{newsdr1[title]}" href="<%linkurl("news_show",{newsdr1[id]})%>">{newsdr1[title]}</a></h3>
+        <%/if%>
+        <%/loop%>
+        <ul class="list">
+          <%set (DataTable){rednews}=get_news_list(1, 0, 8, "is_lock=0 and is_red=1")%>
+          <%loop newsdr11 rednews%>
+          <%if newsdr11__loop__id<=4%>
+          <li>
+            <span>[<%write get_category_title({strtoint({newsdr11[category_id]})}, "")%>]</span>
+            <a href="<%linkurl("news_show",{newsdr11[id]})%>" title="{newsdr11[title]}">{newsdr11[title]}</a>
+          </li>
+          <%/if%>
+          <%/loop%>
+        </ul>
+        <%loop newsdr2 topnews%>
+        <%if newsdr2__loop__id==2%>
+        <h3 class="tit"><a href="<%linkurl("news_show",{newsdr2[id]})%>">{newsdr2[title]}</a></h3>
+        <%/if%>
+        <%/loop%>
+        <ul class="list last">
+          <%loop newsdr12 rednews%>
+          <%if newsdr12__loop__id>4%>
+          <li>
+            <span>[<%write get_category_title({strtoint({newsdr12[category_id]})}, "")%>]</span>
+            <a href="<%linkurl("news_show",{newsdr12[id]})%>" title="{newsdr12[title]}">{newsdr12[title]}</a>
+          </li>
+          <%/if%>
+          <%/loop%>
+        </ul>
+      </div>
+      <!--/Top News-->
+      <div class="clear"></div>
+    </div>
+    <!--Hot Goods-->
+    <div class="clear"></div>
+    <div class="igoods_box">
+      <div class="igoods_list">
+        <dl class="head">
+          <dt>购物商城</dt>
+          <dd>
+            <ul class="sub_nav">
+              <%set (DataTable){category_list1}=get_category_child_list(2, 0)%>
+              <%loop cdr1 category_list1%>
+              <li class="n<%write cdr1__loop__id%>"><a href="<%linkurl("goods_list",{cdr1[id]})%>">{cdr1[title]}</a></li>
+              <%/loop%>
+            </ul>
+          </dd>
+        </dl>
+        
+        <ul class="list">
+          <%set (DataTable){redgoods}=get_goods_list(2, 0, 8, "is_lock=0 and is_red=1")%>
+          <%loop goodsdr1 redgoods%>
+          <li>
+            <a class="pic" href="<%linkurl("goods_show",{goodsdr1[id]})%>"><img src="{goodsdr1[img_url]}" alt="{goodsdr1[title]}" /></a>
+            <div class="info">
+              <a class="name" href="<%linkurl("goods_show",{goodsdr1[id]})%>">{goodsdr1[title]}</a>
+              <div class="price">
+                <span>价格：</span>
+                <strong>￥{goodsdr1[sell_price]}</strong>
+              </div>
+            </div>
+          </li>
+          <%/loop%>
+        </ul>
+      </div>
+    </div>
+    <!--/Hot Goods-->
+  </div>
+  
+  <div class="left264">
+    <!--Red Download-->
+    <div class="idown_list">
+      <h3>推荐资源</h3>
+      <ul>
+        <%set (DataTable){reddown}=get_download_list(4, 0, 5, "is_red=1 and img_url<>''")%>
+        <%loop downdr reddown%>
+        <li><a href="<%linkurl("down_show",{downdr[id]})%>"> <img border="0" alt="{downdr[title]}" src="{downdr[img_url]}" /> </a> <a href="<%linkurl("down_show",{downdr[id]})%>">{downdr[title]}</a> <br />
+          <span class="date">更新：<%datetostr({downdr[add_time]},yyyy-MM-dd)%></span> <br />
+          <a class="down" href="<%linkurl("down_show",{downdr[id]})%>">下载</a>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+    <!--/Red Download-->
+    <!--Hot Goods-->
+    <div class="isidebar">
+      <h3>热门商品</h3>
+      <div class="list">
+        <ol> 
+          <%set (DataTable){hotgoods}=get_goods_list(2, 0, 10, "is_lock=0 and is_hot=1", "click desc,id desc")%>
+          <%loop goodsdr2 hotgoods%>
+          <%if goodsdr2__loop__id==1%>
+          <li class="active" onmouseover="ToggleProps(this, 'active');">
+          <%else%>
+          <li onmousemove="ToggleProps(this, 'active');">
+          <%/if%>
+            <i class="num"><%write goodsdr2__loop__id%></i>
+            <div class="photo">
+              <a title="{goodsdr2[title]}" href="<%linkurl("goods_show",{goodsdr2[id]})%>"><img src="{goodsdr2[img_url]}" alt="{goodsdr2[title]}"></a>
+            </div>
+            <div class="props">
+              <p class="name"><a title="{goodsdr2[title]}" href="<%linkurl("goods_show",{goodsdr2[id]})%>">{goodsdr2[title]}</a></p>
+              <p class="price">¥{goodsdr2[sell_price]}</p>
+              <p class="button"><a class="ibtn" href="<%linkurl("goods_show",{goodsdr2[id]})%>">立即购买</a></p>
+            </div>
+          </li>
+          <%/loop%>
+          </ol>
+      </div>
+    </div>
+    <!--Hot Goods-->
+  </div>
+</div>
+
+<div class="clear"></div>
+<div class="boxwrap" style="border-top:0;">
+  <!--Red Photo-->
+  <div class="iphoto_list">
+    <dl class="head">
+      <dt>图片分享</dt>
+      <dd>
+        <ul class="sub_nav">
+          <%set (DataTable){category_list2}=get_category_child_list(3, 0)%>
+          <%loop cdr2 category_list2%>
+          <li class="n<%write cdr2__loop__id%>"><a href="<%linkurl("photo_list",{cdr2[id]})%>">{cdr2[title]}</a></li>
+          <%/loop%>
+        </ul>
+      </dd>
+    </dl>
+    <div class="clear"></div>
+    <div class="list">
+      <ul>
+        <%set (DataTable){redphoto}=get_news_list(3, 0, 12, "is_lock=0 and is_red=1")%>
+        <%loop photodr1 redphoto%>
+        <li class="a<%write photodr1__loop__id%>">
+          <img src="{photodr1[img_url]}" alt="{photodr1[title]}" />
+          <a title="{photodr1[title]}" href="<%linkurl("photo_show",{photodr1[id]})%>"><strong>{photodr1[title]}</strong><br><span><%cutstring({photodr1[zhaiyao]},28)%></span><br>查看详情</a><i class="absbg"></i>
+        </li>
+        <%/loop%>
+      </ul>
+    </div>
+  </div>
+  <!--/Red Photo-->
+  <!--Links-->
+  <div class="ilink_list">
+    <h3><span class="graylink"><a href="<%linkurl("link","")%>">更多...</a></span>友情链接</h3>
+    <p class="txt">
+      <%set (DataTable){link_list1}=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 0, "is_lock=0 and is_image=0 and is_red=1")%>
+      <%loop ldr1 link_list1%>
+      <a target="_blank" href="{ldr1[site_url]}">{ldr1[title]}</a> | 
+      <%/loop%>
+    </p>
+    <div class="img">
+      <ul>
+        <%set (DataTable){link_list2}=get_plugin_method("DTcms.Web.Plugin.Link", "link", "get_link_list", 9, "is_lock=0 and is_image=1 and is_red=1")%>
+        <%loop ldr2 link_list2%>
+        <li><a target="_blank" href="{ldr2[site_url]}" title="{ldr2[title]}"><img src="{ldr2[img_url]}" width="88" height="31" /></a></li>
+        <%/loop%>
+      </ul>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <!--/Links-->
+</div>
+
+<!--Footer-->
+<%template src=/_footer.html/%>
+<!--/Footer-->
+</body>
+</html>
